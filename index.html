@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Alivio Contributivo 2025 | CLASE A</title>
+  <style>
+    :root {
+      --azul-marino: #062b55;
+      --dorado: #b88a00;
+      --dorado-claro: #d4af37;
+      --blanco: #ffffff;
+      --fondo: #f8f9fb;
+      --borde: #d9dee7;
+      --texto: #1f2933;
+      --gris: #687385;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .header {
+      background: var(--azul-marino);
+      color: white;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      border-bottom: 5px solid var(--dorado);
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .brand-note {
+      color: var(--dorado-claro);
+      font-weight: bold;
+      margin-top: 8px !important;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 22px;
+      margin-top: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: var(--azul-marino);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 16px;
+      background: white;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      color: var(--gris);
+      font-size: 14px;
+      margin-top: -8px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: var(--azul-marino);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover { background: #0a3a70; }
+
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .result-box {
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      background: #fafafa;
+    }
+
+    .result-box h3 {
+      margin: 0 0 8px;
+      color: var(--azul-marino);
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .amount {
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--azul-marino);
+    }
+
+    .relief {
+      background: var(--azul-marino);
+      color: white;
+      text-align: center;
+      border-radius: 14px;
+      padding: 26px 18px;
+      margin-top: 18px;
+      border-bottom: 5px solid var(--dorado);
+    }
+
+    .relief h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .relief .big {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .disclaimer {
+      font-size: 13px;
+      color: var(--gris);
+      border-top: 1px solid var(--borde);
+      margin-top: 20px;
+      padding-top: 16px;
+    }
+
+    .disclaimer strong { color: var(--azul-marino); }
+
+    @media (max-width: 700px) {
+      .grid, .results { grid-template-columns: 1fr; }
+      .header h1 { font-size: 22px; }
+      .relief .big { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Calculadora de Alivio Contributivo 2025</h1>
+      <p>CLASE A ACCOUNTING & MULTISERVICES</p>
+      <p class="brand-note">Estimado informativo para clientes</p>
+    </div>
+
+    <div class="card">
+      <label for="income">Ingreso según Línea 5 del Encasillado 1</label>
+      <input id="income" type="number" min="0" step="0.01" placeholder="Ej. 50000" oninput="calculate()" />
+      <div class="note">Utilice la cantidad de ingresos reflejada en la segunda página de su planilla.</div>
+
+      <div class="grid">
+        <div>
+          <label for="status">Estatus contributivo</label>
+          <select id="status" onchange="calculate()">
+            <option value="individual">Contribuyente individual</option>
+            <option value="married">Casado que rinde planilla conjunta</option>
+            <option value="separate">Casado que rinde separado</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="dependents">Cantidad de dependientes</label>
+          <input id="dependents" type="number" min="0" step="1" value="0" oninput="calculate()" />
+        </div>
+      </div>
+
+      <label for="otherDeductions">Otras deducciones aplicables (opcional)</label>
+      <input id="otherDeductions" type="number" min="0" step="0.01" placeholder="Ej. intereses hipotecarios, donativos..." oninput="calculate()" />
+
+      <button onclick="calculate()">Calcular estimado</button>
+
+      <div class="results">
+        <div class="result-box">
+          <h3>Contribución actual</h3>
+          <div class="amount" id="currentTax">$0.00</div>
+        </div>
+
+        <div class="result-box">
+          <h3>Contribución estimada nueva</h3>
+          <div class="amount" id="proposedTax">$0.00</div>
+        </div>
+      </div>
+
+      <div class="relief">
+        <h2>Cheque de alivio estimado</h2>
+        <div class="big" id="reliefAmount">$0.00</div>
+        <p>Esta es una cantidad estimada y no oficial.</p>
+      </div>
+
+      <div class="disclaimer">
+        <p><strong>Relevo de responsabilidad:</strong> Esta calculadora se ofrece únicamente con fines informativos y educativos. El resultado es un estimado y no constituye una determinación oficial del Departamento de Hacienda. CLASE A ACCOUNTING & MULTISERVICES no garantiza elegibilidad, aprobación ni cantidades de pago, y no será responsable por diferencias entre este estimado y la determinación final emitida por Hacienda.</p>
+        <p>El alivio, si aplica, será determinado automáticamente por el Departamento de Hacienda utilizando la información de la planilla original radicada. No es necesario realizar gestiones adicionales con CLASE A ACCOUNTING & MULTISERVICES para completar este estimado.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function money(value) {
+      return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    function getStandardDeduction(status) {
+      if (status === 'married') return 7000;
+      return 3500;
+    }
+
+    function currentTax(netIncome) {
+      if (netIncome <= 9000) return 0;
+      if (netIncome <= 25000) return (netIncome - 9000) * 0.07;
+      if (netIncome <= 41500) return 1120 + (netIncome - 25000) * 0.14;
+      if (netIncome <= 61500) return 3430 + (netIncome - 41500) * 0.25;
+      return 8430 + (netIncome - 61500) * 0.33;
+    }
+
+    function proposedTax(netIncome) {
+      if (netIncome <= 12500) return 0;
+      if (netIncome <= 25000) return (netIncome - 12500) * 0.06;
+      if (netIncome <= 50000) return 750 + (netIncome - 25000) * 0.12;
+      if (netIncome <= 100000) return 3750 + (netIncome - 50000) * 0.24;
+      if (netIncome <= 150000) return 15750 + (netIncome - 100000) * 0.29;
+      return 30250 + (netIncome - 150000) * 0.33;
+    }
+
+    function calculate() {
+      const income = parseFloat(document.getElementById('income').value) || 0;
+      const status = document.getElementById('status').value;
+      const dependents = parseInt(document.getElementById('dependents').value) || 0;
+      const otherDeductions = parseFloat(document.getElementById('otherDeductions').value) || 0;
+
+      const standardDeduction = getStandardDeduction(status);
+      const currentDependentDeduction = dependents * 2500;
+      const proposedDependentDeduction = dependents * 5000;
+
+      const currentNet = Math.max(0, income - standardDeduction - currentDependentDeduction - otherDeductions);
+      const proposedNet = Math.max(0, income - standardDeduction - proposedDependentDeduction - otherDeductions);
+
+      const taxCurrent = currentTax(currentNet);
+      const taxProposed = proposedTax(proposedNet);
+      const relief = Math.max(0, taxCurrent - taxProposed);
+
+      document.getElementById('currentTax').textContent = money(taxCurrent);
+      document.getElementById('proposedTax').textContent = money(taxProposed);
+      document.getElementById('reliefAmount').textContent = money(relief);
+    }
+
+    calculate();
+  </script>
+</body>
+</html>
