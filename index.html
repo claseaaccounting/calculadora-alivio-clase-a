@@ -180,6 +180,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="header">
@@ -241,7 +242,10 @@
 
   <script>
     function money(value) {
-      return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+      return value.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      });
     }
 
     function getStandardDeduction(status) {
@@ -249,26 +253,45 @@
       return 3500;
     }
 
-    function currentTax(netIncome) {
+    function calculateCurrentTax(netIncome) {
       let tax = 0;
 
-      if (netIncome <= 9000) tax = 0;
-      else if (netIncome <= 25000) tax = (netIncome - 9000) * 0.07;
-      else if (netIncome <= 41500) tax = 1120 + (netIncome - 25000) * 0.14;
-      else if (netIncome <= 61500) tax = 3430 + (netIncome - 41500) * 0.25;
-      else tax = 8430 + (netIncome - 61500) * 0.33;
+      if (netIncome <= 9000) {
+        tax = 0;
+      } else if (netIncome <= 25000) {
+        tax = (netIncome - 9000) * 0.07;
+      } else if (netIncome <= 41500) {
+        tax = 1120 + ((netIncome - 25000) * 0.14);
+      } else if (netIncome <= 61500) {
+        tax = 3430 + ((netIncome - 41500) * 0.25);
+      } else {
+        tax = 8430 + ((netIncome - 61500) * 0.33);
+      }
 
-      // Descuento por cómputo de contribución sobre ingresos del 8% aplicado a la contribución actual.
-      return tax * 0.92;
+      // Descuento por cómputo de contribución sobre ingresos de 8%.
+      tax = tax * 0.92;
+
+      return Math.max(0, tax);
     }
 
-    function proposedTax(netIncome) {
-      if (netIncome <= 12500) return 0;
-      if (netIncome <= 25000) return (netIncome - 12500) * 0.06;
-      if (netIncome <= 50000) return 750 + (netIncome - 25000) * 0.12;
-      if (netIncome <= 100000) return 3750 + (netIncome - 50000) * 0.24;
-      if (netIncome <= 150000) return 15750 + (netIncome - 100000) * 0.29;
-      return 30250 + (netIncome - 150000) * 0.33;
+    function calculateProposedTax(netIncome) {
+      let tax = 0;
+
+      if (netIncome <= 12500) {
+        tax = 0;
+      } else if (netIncome <= 25000) {
+        tax = (netIncome - 12500) * 0.06;
+      } else if (netIncome <= 50000) {
+        tax = 750 + ((netIncome - 25000) * 0.12);
+      } else if (netIncome <= 100000) {
+        tax = 3750 + ((netIncome - 50000) * 0.24);
+      } else if (netIncome <= 150000) {
+        tax = 15750 + ((netIncome - 100000) * 0.29);
+      } else {
+        tax = 30250 + ((netIncome - 150000) * 0.33);
+      }
+
+      return Math.max(0, tax);
     }
 
     function calculate() {
@@ -278,19 +301,27 @@
       const otherDeductions = parseFloat(document.getElementById('otherDeductions').value) || 0;
 
       const standardDeduction = getStandardDeduction(status);
+
       const currentDependentDeduction = dependents * 2500;
       const proposedDependentDeduction = dependents * 5000;
 
-      const currentNet = Math.max(0, income - standardDeduction - currentDependentDeduction - otherDeductions);
-      const proposedNet = Math.max(0, income - standardDeduction - proposedDependentDeduction - otherDeductions);
+      const currentNetIncome = Math.max(
+        0,
+        income - standardDeduction - currentDependentDeduction - otherDeductions
+      );
 
-      const taxCurrent = currentTax(currentNet);
-      const taxProposed = proposedTax(proposedNet);
-      const relief = Math.max(0, taxCurrent - taxProposed);
+      const proposedNetIncome = Math.max(
+        0,
+        income - standardDeduction - proposedDependentDeduction - otherDeductions
+      );
 
-      document.getElementById('currentTax').textContent = money(taxCurrent);
-      document.getElementById('proposedTax').textContent = money(taxProposed);
-      document.getElementById('reliefAmount').textContent = money(relief);
+      const currentTax = calculateCurrentTax(currentNetIncome);
+      const proposedTax = calculateProposedTax(proposedNetIncome);
+      const reliefAmount = Math.max(0, currentTax - proposedTax);
+
+      document.getElementById('currentTax').textContent = money(currentTax);
+      document.getElementById('proposedTax').textContent = money(proposedTax);
+      document.getElementById('reliefAmount').textContent = money(reliefAmount);
     }
 
     calculate();
